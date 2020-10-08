@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nsi.contractManagement.mapper.ContractMapper">
+  <resultMap id="BaseResultMap" type="nsi.contractManagement.DO.Contract">
+    <!--@mbg.generated-->
+    <!--@Table contract-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="department" jdbcType="INTEGER" property="department" />
+    <result column="amount" jdbcType="BIGINT" property="amount" />
+    <result column="sign" jdbcType="TIMESTAMP" property="sign" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="quality_guarantee_datetime" jdbcType="TIMESTAMP" property="qualityGuaranteeDatetime" />
+    <result column="contratc_number" jdbcType="VARCHAR" property="contratcNumber" />
+    <result column="maintenance_datetime" jdbcType="TIMESTAMP" property="maintenanceDatetime" />
+    <result column="accessories" jdbcType="VARCHAR" property="accessories" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, department, amount, sign, company, quality_guarantee_datetime, contratc_number, 
+    maintenance_datetime, accessories, gmt_create, gmt_modified
+  </sql>
+</mapper>
