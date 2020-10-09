@@ -1,12 +1,12 @@
 package nsi.contractManagement.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import nsi.contractManagement.DO.Department;
+import nsi.contractManagement.DO.DepartmentDO;
 
 /**
  * @author Tao
  */
-public interface DepartmentService extends IService<Department>{
+public interface DepartmentService extends IService<DepartmentDO>{
 
 
 }

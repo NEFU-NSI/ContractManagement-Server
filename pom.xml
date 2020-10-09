@@ -10,9 +10,9 @@
         <relativePath/>
     </parent>
     <groupId>nsi</groupId>
-    <artifactId>contract-management</artifactId>
+    <artifactId>contractDO-management</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>contract-management</name>
+    <name>contractDO-management</name>
     <description>ContractManagement</description>
 
     <properties>
@@ -86,6 +86,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>2.0.2</version>
         </dependency>
 
 

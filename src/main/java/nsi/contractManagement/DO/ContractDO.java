@@ -1,11 +1,12 @@
 package nsi.contractManagement.DO;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -22,10 +23,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName(value = "contract")
-public class Contract {
+public class ContractDO {
     /**
      * 主键
      */
+    @JsonIgnore
     @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value="主键")
     private Integer id;
@@ -33,6 +35,7 @@ public class Contract {
     /**
      * 合同名称
      */
+    @NotNull(message = "请输入合同名称")
     @TableField(value = "`name`")
     @ApiModelProperty(value="合同名称")
     private String name;
@@ -40,6 +43,7 @@ public class Contract {
     /**
      * 科室
      */
+    @NotNull(message = "请输入科室")
     @TableField(value = "department")
     @ApiModelProperty(value="科室")
     private Integer department;
@@ -47,6 +51,7 @@ public class Contract {
     /**
      * 合同总额
      */
+    @NotNull(message = "请输入合同总额")
     @TableField(value = "amount")
     @ApiModelProperty(value="合同总额")
     private Long amount;
@@ -54,13 +59,17 @@ public class Contract {
     /**
      * 合同签订日期
      */
+    @NotNull(message = "请输入合同总额")
+
     @TableField(value = "sign")
     @ApiModelProperty(value="合同签订日期")
-    private Date sign;
+    private LocalDateTime sign;
 
     /**
      * 合同签订公司
      */
+    @NotNull(message = "请输入合同签订公司")
+
     @TableField(value = "company")
     @ApiModelProperty(value="合同签订公司")
     private String company;
@@ -68,23 +77,27 @@ public class Contract {
     /**
      * 质保金缴纳时间
      */
+    @NotNull(message = "请输入质保金缴纳时间")
     @TableField(value = "quality_guarantee_datetime")
     @ApiModelProperty(value="质保金缴纳时间")
-    private Date qualityGuaranteeDatetime;
+    private LocalDateTime qualityGuaranteeDatetime;
 
     /**
      * 合同编号
      */
-    @TableField(value = "contratc_number")
+    @NotNull(message = "请输入合同编号")
+    @TableField(value = "contract_number")
     @ApiModelProperty(value="合同编号")
-    private String contratcNumber;
+    private String contractNumber;
 
     /**
      * 维保时间
      */
+    @NotNull(message = "请输入维保时间")
+
     @TableField(value = "maintenance_datetime")
     @ApiModelProperty(value="维保时间")
-    private Date maintenanceDatetime;
+    private LocalDateTime maintenanceDatetime;
 
     /**
      * 附件
@@ -96,16 +109,18 @@ public class Contract {
     /**
      * 创建时间
      */
-    @TableField(value = "gmt_create")
+    @JsonIgnore
+    @TableField(value = "gmt_create",fill = FieldFill.INSERT)
     @ApiModelProperty(value="创建时间")
-    private Date gmtCreate;
+    private LocalDateTime gmtCreate;
 
     /**
      * 更新时间
      */
-    @TableField(value = "gmt_modified")
+    @JsonIgnore
+    @TableField(value = "gmt_modified",fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value="更新时间")
-    private Date gmtModified;
+    private LocalDateTime gmtModified;
 
     public static final String COL_ID = "id";
 
@@ -121,7 +136,7 @@ public class Contract {
 
     public static final String COL_QUALITY_GUARANTEE_DATETIME = "quality_guarantee_datetime";
 
-    public static final String COL_CONTRATC_NUMBER = "contratc_number";
+    public static final String COL_CONTRACT_NUMBER = "contract_number";
 
     public static final String COL_MAINTENANCE_DATETIME = "maintenance_datetime";
 
