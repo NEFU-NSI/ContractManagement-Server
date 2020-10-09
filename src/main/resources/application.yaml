@@ -6,7 +6,6 @@ spring:
     name: contract_management
     username: root
     password: nefunsi
-    # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     filters: stat

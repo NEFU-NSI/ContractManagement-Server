@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +18,9 @@ import java.time.LocalDateTime;
 class ContractDOServiceTest {
     @Autowired
     private ContractMapper contractMapper;
+
+    @Autowired
+    private ContractService contractService;
 
     @Test
     public void testSave() {
@@ -40,6 +44,6 @@ class ContractDOServiceTest {
         queryWrapper.eq("name", "");
         queryWrapper.eq("department", "");
         log.warn(contractMapper.selectList(queryWrapper).toString());
-
     }
+
 }
