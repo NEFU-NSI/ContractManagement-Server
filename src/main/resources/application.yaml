@@ -39,7 +39,7 @@ mybatis-plus:
     db-config:
       logic-delete-field: isDeleted
 server:
-  port: 80
+  port: 8080
   error:
     whitelabel:
       enabled: false

@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @Api("合同增查改删操作")
-@RequestMapping("contract")
+@RequestMapping("/api/contract")
 @ResponseResultBody
 public class ContactController {
     @Autowired
