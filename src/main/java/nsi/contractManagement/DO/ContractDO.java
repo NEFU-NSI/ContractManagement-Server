@@ -4,7 +4,11 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -35,6 +39,7 @@ public class ContractDO {
     /**
      * 合同名称
      */
+    @NotBlank(message = "请输入合同名称")
     @NotNull(message = "请输入合同名称")
     @TableField(value = "`name`")
     @ApiModelProperty(value="合同名称")
@@ -60,7 +65,7 @@ public class ContractDO {
      * 合同签订日期
      */
     @NotNull(message = "请输入合同总额")
-
+    @Past(message = "合同签订日期有误")
     @TableField(value = "sign")
     @ApiModelProperty(value="合同签订日期")
     private LocalDateTime sign;
@@ -68,8 +73,8 @@ public class ContractDO {
     /**
      * 合同签订公司
      */
+    @NotBlank(message = "请输入合同签订公司")
     @NotNull(message = "请输入合同签订公司")
-
     @TableField(value = "company")
     @ApiModelProperty(value="合同签订公司")
     private String company;
@@ -77,6 +82,7 @@ public class ContractDO {
     /**
      * 质保金缴纳时间
      */
+    @Past(message = "质保金缴纳时间有误")
     @NotNull(message = "请输入质保金缴纳时间")
     @TableField(value = "quality_guarantee_datetime")
     @ApiModelProperty(value="质保金缴纳时间")
@@ -85,7 +91,7 @@ public class ContractDO {
     /**
      * 合同编号
      */
-    @NotNull(message = "请输入合同编号")
+    @NotBlank(message = "请输入合同编号")
     @TableField(value = "contract_number")
     @ApiModelProperty(value="合同编号")
     private String contractNumber;
@@ -93,8 +99,8 @@ public class ContractDO {
     /**
      * 维保时间
      */
+    @Future(message = "维保时间有误")
     @NotNull(message = "请输入维保时间")
-
     @TableField(value = "maintenance_datetime")
     @ApiModelProperty(value="维保时间")
     private LocalDateTime maintenanceDatetime;

@@ -11,8 +11,10 @@ import nsi.contractManagement.config.ResponseResultBody;
 import nsi.contractManagement.mapper.ContractMapper;
 import nsi.contractManagement.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -36,7 +38,7 @@ public class ContactController {
 
     @PostMapping("add")
     @ApiOperation(value = "添加合同信息")
-    public boolean addContract(@RequestBody ContractDO contractDO) {
+    public boolean addContract(@Valid @RequestBody ContractDO contractDO) {
         UpdateWrapper<ContractDO> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("contract_number", contractDO.getContractNumber()).or().eq("name",
                 contractDO.getName());
