@@ -20,17 +20,13 @@ import java.util.List;
 public class PageDTO<T> {
     Long current;
     Long size;
-    Long pages;
-    Boolean hasNext;
-    Boolean hasPrevious;
+    Long total;
     List<T> pageContent;
 
-    public PageDTO(List<T> pageContent, Page<T> page) {
+    public PageDTO(List<T> pageContent, Page<T> page, Long total) {
         this.current = page.getCurrent();
         this.size = page.getSize();
-        this.pages = page.getPages();
-        this.hasNext = page.hasNext();
-        this.hasPrevious = page.hasPrevious();
+        this.total = total;
         this.pageContent = pageContent;
     }
 }

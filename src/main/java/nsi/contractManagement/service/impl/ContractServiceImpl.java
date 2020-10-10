@@ -3,8 +3,6 @@ package nsi.contractManagement.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import nsi.contractManagement.DO.ContractDO;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import nsi.contractManagement.mapper.ContractMapper;
@@ -25,12 +23,31 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, ContractDO>
         this.contractMapper = contractMapper;
     }
 
+
     @Override
     public List<ContractDO> multipleConditionsSearch(String year, String company,
                                                      String contractName,
                                                      String contractDepartment, Integer current,
                                                      Integer size) {
         Page<ContractDO> pageContractDO = new Page<>(current, size);
+        initQueryWrapper(year, company, contractName, contractDepartment);
+        QueryWrapper<ContractDO> queryWrapper = initQueryWrapper(year, company, contractName,
+                contractDepartment);
+        return contractMapper.selectPage(pageContractDO, queryWrapper).getRecords();
+    }
+
+    @Override
+    public int multipleConditionsSearchTotal(String year, String company, String contractName,
+                                             String contractDepartment, Integer current,
+                                             Integer size) {
+        QueryWrapper<ContractDO> queryWrapper = initQueryWrapper(year, company, contractName,
+                contractDepartment);
+        return contractMapper.selectCount(queryWrapper);
+    }
+
+    private QueryWrapper<ContractDO> initQueryWrapper(String year, String company,
+                                                      String contractName,
+                                                      String contractDepartment) {
         QueryWrapper<ContractDO> queryWrapper = new QueryWrapper<>();
         if ("".equals(year)) {
             Calendar calendar = Calendar.getInstance();
@@ -48,7 +65,7 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, ContractDO>
         if (!"".equals(contractName)) {
             queryWrapper.eq("department", contractDepartment);
         }
-        return contractMapper.selectPage(pageContractDO, queryWrapper).getRecords();
+        return queryWrapper;
     }
 
 }

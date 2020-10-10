@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import nsi.contractManagement.DO.ContractDO;
 import nsi.contractManagement.DTO.PageDTO;
 import nsi.contractManagement.DTO.StatisticsDTO;
@@ -25,6 +26,7 @@ import java.util.List;
  * @FileName: ContactController.java
  * @IDE: IntelliJ IDEA
  */
+@Slf4j
 @RestController
 @Api("合同增查改删操作")
 @RequestMapping("/api/contract")
@@ -61,15 +63,19 @@ public class ContactController {
             @RequestParam(value = "current",
                     defaultValue = "1") Integer current,
             @RequestParam(value = "size",
-                    defaultValue = "5") Integer size
+                    defaultValue = "3") Integer size
 
     ) {
+        long multipleConditionsSearchTotal = contractService.multipleConditionsSearchTotal(year,
+                company, contractName,
+                contractDepartment,
+                current, size);
         Page<ContractDO> pageContractDO = new Page<>(current, size);
         return new PageDTO<>(
                 contractService.multipleConditionsSearch(year, company, contractName,
                         contractDepartment,
                         current, size),
-                pageContractDO);
+                pageContractDO, multipleConditionsSearchTotal);
     }
 
     @GetMapping("statistics")

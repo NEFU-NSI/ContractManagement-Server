@@ -70,7 +70,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.0</version>
+            <version>3.3.2</version>
         </dependency>
         <!-- Mybatis PLUS -->
         <!-- swagger-->
@@ -93,7 +93,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>2.3.4.RELEASE</version>
         </dependency>
-
 
 
     </dependencies>
