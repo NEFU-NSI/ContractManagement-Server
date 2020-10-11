@@ -1,6 +1,5 @@
-package nsi.contractManagement.config;
+package nsi.contractManagement.config.response;
 
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;

@@ -3,13 +3,11 @@ package nsi.contractManagement.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import nsi.contractManagement.DO.ContractDO;
-import nsi.contractManagement.DTO.StatisticsDTO;
+import nsi.contractManagement.VO.StatisticsVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.springframework.context.annotation.Primary;
 
-import java.time.Year;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -24,7 +22,7 @@ public interface ContractMapper extends BaseMapper<ContractDO> {
      * @return Map<department, amount>
      */
 
-    List<StatisticsDTO> statisticsMapper(@Param("year") String year);
+    List<StatisticsVO> statisticsMapper(@Param("year") String year);
 
     /**
      * 多条件查询合同
@@ -52,8 +50,17 @@ public interface ContractMapper extends BaseMapper<ContractDO> {
      * @return 符合条件的合同
      */
     long multipleConditionsSearchTotal(@Param("signYear") String year,
-                                      @Param("company") String company,
-                                      @Param("contractName") String contractName,
-                                      @Param("contractDepartment") String contractDepartment
+                                       @Param("company") String company,
+                                       @Param("contractName") String contractName,
+                                       @Param("contractDepartment") String contractDepartment
     );
+
+    /**
+     * 通过开始结束日期获得需要通知的合同
+     *
+     * @param startDateTime 开始时间
+     * @param endDateTime   结束时间
+     * @return 符合条件的合同
+     */
+    List<ContractDO> remindQualityGuaranteeDatetime(@Param("Datetime") LocalDateTime startDateTime, @Param("Datetime") LocalDateTime endDateTime);
 }

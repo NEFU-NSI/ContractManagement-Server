@@ -1,4 +1,4 @@
-package nsi.contractManagement.config;
+package nsi.contractManagement.config.response;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 

@@ -1,7 +1,6 @@
-package nsi.contractManagement.DTO;
+package nsi.contractManagement.VO;
 
 import lombok.Data;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * @Author: Tao
@@ -11,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
  * @IDE: IntelliJ IDEA
  */
 @Data
-public class ContractDTO {
+public class ContractVO {
     String year;
     String company;
     String contractName;

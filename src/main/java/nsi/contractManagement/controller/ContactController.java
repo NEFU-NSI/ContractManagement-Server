@@ -7,16 +7,14 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import nsi.contractManagement.DO.ContractDO;
 import nsi.contractManagement.DO.DepartmentDO;
-import nsi.contractManagement.DTO.PageDTO;
-import nsi.contractManagement.DTO.StatisticsDTO;
-import nsi.contractManagement.config.ApiException;
-import nsi.contractManagement.config.ResponseResultBody;
+import nsi.contractManagement.VO.PageVO;
+import nsi.contractManagement.VO.StatisticsVO;
+import nsi.contractManagement.config.response.ApiException;
+import nsi.contractManagement.config.response.ResponseResultBody;
 import nsi.contractManagement.mapper.ContractMapper;
 import nsi.contractManagement.service.ContractService;
 import nsi.contractManagement.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -61,7 +59,7 @@ public class ContactController {
 
     @GetMapping("list")
     @ApiOperation(value = "查询合同信息")
-    public PageDTO<ContractDO> listContract(
+    public PageVO<ContractDO> listContract(
             @RequestParam(value = "signYear", required = false,
                     defaultValue = "") String year,
             @RequestParam(value = "company", required = false,
@@ -84,12 +82,12 @@ public class ContactController {
         List<ContractDO> contractDos = contractMapper.multipleConditionsSearch(pageContractDO,
                 year, company, contractName,
                 contractDepartment);
-        return new PageDTO<>(current,size,multipleConditionsSearchTotal,contractDos);
+        return new PageVO<>(current,size,multipleConditionsSearchTotal,contractDos);
     }
 
     @GetMapping("statistics")
     @ApiOperation("根据年份、科室统计")
-    public List<StatisticsDTO> statisticsByYearOrDepartment(@RequestParam(value = "year") String year) {
+    public List<StatisticsVO> statisticsByYearOrDepartment(@RequestParam(value = "year") String year) {
         return contractMapper.statisticsMapper(year);
     }
 

@@ -1,4 +1,4 @@
-package nsi.contractManagement.config;
+package nsi.contractManagement.config.response;
 
 /**
  * @Author: Tao

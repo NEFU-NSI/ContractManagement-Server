@@ -1,9 +1,6 @@
-package nsi.contractManagement.DTO;
+package nsi.contractManagement.VO;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.*;
-import nsi.contractManagement.DO.ContractDO;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageDTO<T> {
+public class PageVO<T> {
     Integer current;
     Integer size;
     Long total;

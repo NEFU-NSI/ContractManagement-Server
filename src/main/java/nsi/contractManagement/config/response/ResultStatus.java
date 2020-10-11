@@ -1,4 +1,4 @@
-package nsi.contractManagement.config;
+package nsi.contractManagement.config.response;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -26,8 +26,24 @@ public enum ResultStatus {
     /*
     参数错误
      */
-    PARAMETER_ERROR(HttpStatus.BAD_REQUEST, 501, "参数错误");
+    PARAMETER_ERROR(HttpStatus.BAD_REQUEST, 501, "参数错误"),
+    /*
+      密码错误
+       */
+    USER_PASSWORD_ERROR(HttpStatus.BAD_REQUEST, 503, "参数错误"),
+    /*
+     其它错误
+      */
+    USER_LOGIN_FAIL(HttpStatus.BAD_REQUEST, 504, "参数错误"),
 
+    /**
+     * 用户未登录
+     */
+    USER_NEED_LOGIN(HttpStatus.BAD_REQUEST, 505, "用户未登录"),
+    /**
+     * 用户登录超市
+     */
+    USER_LOGIN_TIMEOUT(HttpStatus.BAD_REQUEST, 506, "用户登录超时");
     /**
      * 返回的HTTP状态码, 符合http请求
      */

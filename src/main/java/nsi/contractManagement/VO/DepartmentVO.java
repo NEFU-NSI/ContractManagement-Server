@@ -1,4 +1,4 @@
-package nsi.contractManagement.DTO;
+package nsi.contractManagement.VO;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
  * @IDE: IntelliJ IDEA
  */
 @Data
-public class DepartmentDTO {
+public class DepartmentVO {
     @NotBlank(message = "部门名称不能为空")
     String departmentName;
 }

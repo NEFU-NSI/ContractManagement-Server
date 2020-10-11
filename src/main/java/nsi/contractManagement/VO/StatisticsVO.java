@@ -1,4 +1,4 @@
-package nsi.contractManagement.DTO;
+package nsi.contractManagement.VO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatisticsDTO {
+public class StatisticsVO {
     String departmentName;
     Long amount;
 }

@@ -1,4 +1,4 @@
-package nsi.contractManagement.config;
+package nsi.contractManagement.config.mybatis;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

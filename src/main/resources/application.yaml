@@ -47,6 +47,14 @@ spring:
         # 登录用户名/密码
         login-username: root
         login-password: nefunsi
+  redis:
+    host: 10.10.11.141
+    port: 6379
+  pool:
+    max-active: 8
+    min-idle: 0
+    max-idle: 8
+    max-wait: -1
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

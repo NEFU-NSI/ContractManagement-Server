@@ -61,7 +61,7 @@
         </if>
     </select>
 
-    <select id="statisticsMapper" resultType="nsi.contractManagement.DTO.StatisticsDTO">
+    <select id="statisticsMapper" resultType="nsi.contractManagement.VO.StatisticsVO">
         select sum(amount) as amount, department.department_name
         from contract,
              department
@@ -71,5 +71,8 @@
         </if>
         group by department
         order by amount desc;
+    </select>
+
+    <select id="remindQualityGuaranteeDatetime" resultMap="BaseResultMap">
     </select>
 </mapper>

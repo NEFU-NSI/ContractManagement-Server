@@ -1,4 +1,4 @@
-package nsi.contractManagement.config;
+package nsi.contractManagement.config.response;
 
 import lombok.Data;
 
@@ -71,10 +71,17 @@ public class Result<T> {
     }
 
     /**
-     * 参数错误
+     * 业务异常返回业务代码,描述和返回的参数
      */
     public static <T> Result<T> failure(String message) {
         return new Result<>(ResultStatus.PARAMETER_ERROR, message);
+    }
+
+    /**
+     * 业务异常返回业务代码,描述和返回的参数
+     */
+    public static <T> Result<T> failure(ResultStatus resultStatus, String message) {
+        return new Result<>(resultStatus, message);
     }
 
     /**
