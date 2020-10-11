@@ -57,7 +57,7 @@ spring:
     cache: false
 
 mybatis-plus:
-  mapper-locations: classpath*:security/mapper/xml/*.xml
+  mapper-locations: classpath:mapperXml/*.xml
   configuration:
     map-underscore-to-camel-case: true
     call-setters-on-nulls: true

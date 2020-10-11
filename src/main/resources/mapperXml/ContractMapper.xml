@@ -1,25 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="nsi.contractManagement.mapper.ContractMapper">
-  <resultMap id="BaseResultMap" type="nsi.contractManagement.DO.ContractDO">
-    <!--@mbg.generated-->
-    <!--@Table contractDO-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="department" jdbcType="INTEGER" property="department" />
-    <result column="amount" jdbcType="BIGINT" property="amount" />
-    <result column="sign" jdbcType="TIMESTAMP" property="sign" />
-    <result column="company" jdbcType="VARCHAR" property="company" />
-    <result column="quality_guarantee_datetime" jdbcType="TIMESTAMP" property="qualityGuaranteeDatetime" />
-    <result column="contratc_number" jdbcType="VARCHAR" property="contractNumber" />
-    <result column="maintenance_datetime" jdbcType="TIMESTAMP" property="maintenanceDatetime" />
-    <result column="accessories" jdbcType="VARCHAR" property="accessories" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, `name`, department, amount, sign, company, quality_guarantee_datetime, contratc_number, 
-    maintenance_datetime, accessories, gmt_create, gmt_modified
-  </sql>
+    <resultMap id="BaseResultMap" type="nsi.contractManagement.DO.ContractDO">
+        <!--@mbg.generated-->
+        <!--@Table contract-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="department" jdbcType="INTEGER" property="department"/>
+        <result column="amount" jdbcType="BIGINT" property="amount"/>
+        <result column="sign" jdbcType="TIMESTAMP" property="sign"/>
+        <result column="company" jdbcType="VARCHAR" property="company"/>
+        <result column="quality_guarantee_datetime" jdbcType="TIMESTAMP"
+                property="qualityGuaranteeDatetime"/>
+        <result column="contract_number" jdbcType="VARCHAR" property="contractNumber"/>
+        <result column="maintenance_datetime" jdbcType="TIMESTAMP" property="maintenanceDatetime"/>
+        <result column="accessories" jdbcType="VARCHAR" property="accessories"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `name`, department, amount, sign, company, quality_guarantee_datetime, contract_number,
+        maintenance_datetime, accessories, gmt_create, gmt_modified
+    </sql>
+
+    <select id="multipleConditionsSearch" resultMap="BaseResultMap">
+        select *
+        from contract
+                     left join department d on contract.department = d.id where true
+        <if test="signYear != ''">
+            and YEAR(contract.sign) = #{signYear}
+        </if>
+        <if test="company != ''">
+            and contract.company = #{company,jdbcType=VARCHAR}
+        </if>
+        <if test="contractName != ''">
+            and contract.name = #{contractName}
+        </if>
+        <if test="contractDepartment != ''">
+            and contract.department = #{contractDepartment,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="multipleConditionsSearchTotal" resultType="long">
+        select count(1)
+        from contract
+                     left join department d on contract.department = d.id where true
+        <if test="signYear != ''">
+            and YEAR(contract.sign) = #{signYear}
+        </if>
+        <if test="company != ''">
+            and contract.company = #{company,jdbcType=VARCHAR}
+        </if>
+        <if test="contractName != ''">
+            and contract.name = #{contractName}
+        </if>
+        <if test="contractDepartment != ''">
+            and contract.department = #{contractDepartment,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="statisticsMapper" resultType="nsi.contractManagement.DTO.StatisticsDTO">
+        select sum(amount) as amount, department.department_name
+        from contract,
+             department
+                where contract.department = department.id
+        <if test="year != ''">
+            and year(sign) = #{year}
+        </if>
+        group by department
+        order by amount desc;
+    </select>
 </mapper>

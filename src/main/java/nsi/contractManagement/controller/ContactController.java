@@ -6,13 +6,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import nsi.contractManagement.DO.ContractDO;
+import nsi.contractManagement.DO.DepartmentDO;
 import nsi.contractManagement.DTO.PageDTO;
 import nsi.contractManagement.DTO.StatisticsDTO;
+import nsi.contractManagement.config.ApiException;
 import nsi.contractManagement.config.ResponseResultBody;
 import nsi.contractManagement.mapper.ContractMapper;
 import nsi.contractManagement.service.ContractService;
+import nsi.contractManagement.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,10 +42,17 @@ public class ContactController {
     @Autowired
     private ContractMapper contractMapper;
 
+    @Autowired
+    private DepartmentService departmentService;
+
     @PostMapping("add")
     @ApiOperation(value = "添加合同信息")
-    public boolean addContract(@Valid @RequestBody ContractDO contractDO) {
+    public boolean addContract(@Valid @RequestBody ContractDO contractDO)  {
         UpdateWrapper<ContractDO> updateWrapper = new UpdateWrapper<>();
+        DepartmentDO byId = departmentService.getById(contractDO.getDepartment());
+        if (byId == null) {
+            throw new ApiException("部门不存在");
+        }
         updateWrapper.eq("contract_number", contractDO.getContractNumber()).or().eq("name",
                 contractDO.getName());
         return contractService.saveOrUpdate(contractDO, updateWrapper);
@@ -66,16 +77,14 @@ public class ContactController {
                     defaultValue = "3") Integer size
 
     ) {
-        long multipleConditionsSearchTotal = contractService.multipleConditionsSearchTotal(year,
-                company, contractName,
-                contractDepartment,
-                current, size);
         Page<ContractDO> pageContractDO = new Page<>(current, size);
-        return new PageDTO<>(
-                contractService.multipleConditionsSearch(year, company, contractName,
-                        contractDepartment,
-                        current, size),
-                pageContractDO, multipleConditionsSearchTotal);
+        long multipleConditionsSearchTotal = contractMapper.multipleConditionsSearchTotal(year,
+                company, contractName,
+                contractDepartment);
+        List<ContractDO> contractDos = contractMapper.multipleConditionsSearch(pageContractDO,
+                year, company, contractName,
+                contractDepartment);
+        return new PageDTO<>(current,size,multipleConditionsSearchTotal,contractDos);
     }
 
     @GetMapping("statistics")

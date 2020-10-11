@@ -1,5 +1,6 @@
 package nsi.contractManagement.config;
 
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -72,6 +73,9 @@ public class ResponseResultBodyAdvice implements ResponseBodyAdvice<Object> {
             return methodArgumentNotValidExceptionHandle((MethodArgumentNotValidException) ex,
                     headers, request);
         }
+        if(ex instanceof ApiException){
+            return apiExceptionHandle((ApiException) ex, headers, request);
+        }
         return this.handleException(ex, headers, request);
     }
 
@@ -108,6 +112,19 @@ public class ResponseResultBodyAdvice implements ResponseBodyAdvice<Object> {
         return this.handleExceptionInternal(ex, body, headers, status, request);
     }
 
+
+    /*
+    API错误
+     */
+
+    protected ResponseEntity<Result<?>> apiExceptionHandle(ApiException ex,
+                                                           HttpHeaders headers,
+                                                           WebRequest request) {
+        Result<?> body =
+                Result.failure(Objects.requireNonNull(ex.getMessage()));
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return this.handleExceptionInternal(ex, body, headers, status, request);
+    }
 
     protected ResponseEntity<Result<?>> handleExceptionInternal(
             Exception ex, Result<?> body, HttpHeaders headers, HttpStatus status,

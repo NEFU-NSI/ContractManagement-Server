@@ -20,9 +20,20 @@ class ContractMapperTest {
         Page<ContractDO> contractDOPage = new Page<>(1, 3);
         QueryWrapper<ContractDO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("company", "东软");
-        System.out.println(contractDOPage.getTotal()+"                   " +
+        System.out.println(contractDOPage.getTotal() + "                   " +
                 "**************************     ");
         System.out.println(contractMapper.selectPage(contractDOPage, queryWrapper).getRecords().toString());
+
+    }
+
+    @Test
+    void tesTMultipleConditionsSearch() {
+        Page<ContractDO> page = new Page<>(1, 3);
+        contractMapper.multipleConditionsSearch(page, "2019", "", "", "");
+    }
+    @Test
+    void testMultipleConditionsSearchTotal(){
+        System.out.println(contractMapper.multipleConditionsSearchTotal("2020", "", "", ""));
 
     }
 }

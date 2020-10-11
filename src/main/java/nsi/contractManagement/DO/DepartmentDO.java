@@ -7,42 +7,50 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author Tao
  */
-@ApiModel(value="nsi-contractmanagement-do-Department")
+@ApiModel(value = "nsi-contractmanagement-do-Department")
 @Data
 @Builder
 @TableName(value = "department")
+@AllArgsConstructor
+@NoArgsConstructor
 public class DepartmentDO {
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value="id")
+    @ApiModelProperty(value = "id")
     private Integer id;
 
     /**
      * 部门名称
      */
+    @NotBlank(message = "部门名称不能为空")
     @TableField(value = "department_name")
-    @ApiModelProperty(value="部门名称")
+    @ApiModelProperty(value = "部门名称")
     private String departmentName;
 
     /**
      * 创建时间
      */
     @JsonIgnore
-    @TableField(value = "gmt_create",fill = FieldFill.INSERT)
-    @ApiModelProperty(value="创建时间")
+    @TableField(value = "gmt_create", fill = FieldFill.INSERT)
+    @ApiModelProperty(value = "创建时间")
     private LocalDateTime gmtCreate;
 
     /**
      * 更新时间
      */
     @JsonIgnore
-    @TableField(value = "gmt_modified",fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty(value="更新时间")
+    @TableField(value = "gmt_modified", fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty(value = "更新时间")
     private LocalDateTime gmtModified;
 
     public static final String COL_ID = "id";

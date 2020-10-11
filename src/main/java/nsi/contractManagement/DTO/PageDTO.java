@@ -14,19 +14,12 @@ import java.util.List;
  * @FileName: ContractDTO.java
  * @IDE: IntelliJ IDEA
  */
-@ToString
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PageDTO<T> {
-    Long current;
-    Long size;
+    Integer current;
+    Integer size;
     Long total;
     List<T> pageContent;
-
-    public PageDTO(List<T> pageContent, Page<T> page, Long total) {
-        this.current = page.getCurrent();
-        this.size = page.getSize();
-        this.total = total;
-        this.pageContent = pageContent;
-    }
 }
