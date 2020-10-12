@@ -1,4 +1,6 @@
 spring:
+  aop:
+    proxy-target-class: true
   mvc:
     static-path-pattern: /static/**
   datasource:
@@ -78,7 +80,9 @@ server:
   error:
     whitelabel:
       enabled: false
-#logging:
-#  level:
-#    root:
-#      warn
+
+jwt:
+  tokenHeader: 'Authorization'
+  secret: 'nefunsi'
+  expiration: 604800
+  tokenHead: 'Bearer '

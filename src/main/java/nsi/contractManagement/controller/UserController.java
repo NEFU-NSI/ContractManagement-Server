@@ -1,21 +1,25 @@
 package nsi.contractManagement.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import nsi.contractManagement.DO.DepartmentDO;
 import nsi.contractManagement.DO.UserDO;
+import nsi.contractManagement.VO.UserVO;
 import nsi.contractManagement.config.response.ApiException;
 import nsi.contractManagement.config.response.ResponseResultBody;
+import nsi.contractManagement.config.response.Result;
+import nsi.contractManagement.config.response.ResultStatus;
 import nsi.contractManagement.mapper.DepartmentMapper;
 import nsi.contractManagement.mapper.UserMapper;
+import nsi.contractManagement.service.impl.CustomUserDetailsServiceImpl;
+import nsi.contractManagement.utils.JwtTokenUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: Tao
@@ -29,27 +33,87 @@ import javax.validation.constraints.NotNull;
 @ResponseResultBody
 @RestController
 public class UserController {
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader = "Authorization";
+    @Value("${jwt.tokenHead}")
+    private String tokenHead = "Bearer ";
+
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private DepartmentMapper departmentMapper;
 
+    @Autowired
+    private CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
+
     @ApiOperation(value = "注册")
     @PostMapping("register")
-    public boolean register(@Valid @RequestBody UserDO userDO) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encoderPassword = encoder.encode(userDO.getPassword());
-        userDO.setPassword(encoderPassword);
-        QueryWrapper<UserDO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("email", userDO.getEmail()).or().eq("name", userDO.getName());
-        UserDO selectOne = userMapper.selectOne(queryWrapper);
-        if (selectOne != null) {
-            throw new ApiException("重复注册");
+    public boolean register(@RequestParam String email,
+                            @RequestParam String password,
+                            @RequestParam String name
+    ) {
+        // TODO 科室存在性校验
+        return customUserDetailsServiceImpl.register(email, password, name);
+    }
+
+    @ApiOperation(value = "登录")
+    @PostMapping("login")
+    public Result<Map<String, String>> login(@RequestParam String email,
+                                             @RequestParam String password) {
+        String token = customUserDetailsServiceImpl.login(email, password);
+        Map<String, String> tokenMap = new HashMap<>(10);
+        tokenMap.put("token", token);
+        tokenMap.put("tokenHead", tokenHead);
+        return Result.success(tokenMap);
+    }
+
+    @ApiOperation(value = "获取用户信息")
+    @GetMapping("info")
+    public UserVO info(HttpServletRequest request) {
+        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
+        String token = request.getHeader(tokenHeader).replace("Bearer ", "");
+        boolean tokenExpired = jwtTokenUtil.isTokenExpired(token);
+        if (!tokenExpired) {
+            UserVO userVO = new UserVO();
+            UserDO currentMember = customUserDetailsServiceImpl.getCurrentMember(token);
+            BeanUtils.copyProperties(currentMember, userVO);
+            String departmentName =
+                    departmentMapper.selectById(currentMember.getId()).getDepartmentName();
+            userVO.setDepartment(departmentName);
+            return userVO;
+        } else {
+            throw new ApiException("用户token失效");
         }
-        DepartmentDO departmentDO = departmentMapper.selectById(userDO.getDepartment());
-        if (departmentDO == null) {
-            throw new ApiException("部门不存在");
+
+    }
+
+    @ApiOperation(value = "刷新token")
+    @GetMapping("refresh")
+    public Result<Object> refreshToken(HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        String refreshToken = customUserDetailsServiceImpl.refreshToken(token);
+        if (refreshToken == null) {
+            return Result.failure(ResultStatus.BAD_REQUEST, "token已经过期");
         }
-        return userMapper.insert(userDO) == 1;
+        Map<String, String> tokenMap = new HashMap<>(10);
+        tokenMap.put("token", refreshToken);
+        tokenMap.put("tokenHead", tokenHead);
+        return Result.success(ResultStatus.SUCCESS, tokenMap);
+    }
+
+    @ApiOperation("修改密码")
+    @PostMapping("updatePassword")
+    public boolean updatePassword(@RequestParam(value = "email", defaultValue = "") String email,
+                                  @RequestParam(value = "password", defaultValue = "") String password,
+                                  HttpServletRequest request) {
+        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
+        String token = request.getHeader(tokenHeader).replace("Bearer ", "");
+        boolean tokenExpired = jwtTokenUtil.isTokenExpired(token);
+        if (!tokenExpired) {
+            customUserDetailsServiceImpl.updatePassword(email, password);
+        } else {
+            throw new ApiException("token无效");
+        }
+        return customUserDetailsServiceImpl.updatePassword(email, password);
     }
 }

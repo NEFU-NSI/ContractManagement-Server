@@ -8,5 +8,9 @@ import nsi.contractManagement.DO.UserDO;
  */
 public interface UserService extends IService<UserDO>{
 
+//    /**
+//     * 登录后获取token
+//     */
+//    String login(String username, String password);
 
 }
