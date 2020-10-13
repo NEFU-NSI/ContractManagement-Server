@@ -7,6 +7,7 @@ import nsi.contractManagement.mapper.ContractMapper;
 import nsi.contractManagement.mapper.RemindMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -78,6 +79,7 @@ public class MyRemindServiceImpl {
         }
     }
 
+    @Scheduled(fixedRate = 300000)
     public void scanAndSave() {
         List<ContractDO> expire = this.qualityGuaranteeExpire();
         List<RemindDO> remindDOList = this.qualityGuaranteeExpireDoList(expire);
