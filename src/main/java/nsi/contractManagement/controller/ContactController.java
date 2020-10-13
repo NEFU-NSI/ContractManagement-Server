@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api("合同增查改删操作")
+@Api(tags = "合同增查改删操作")
 @RequestMapping("/api/contract")
 @ResponseResultBody
 public class ContactController {

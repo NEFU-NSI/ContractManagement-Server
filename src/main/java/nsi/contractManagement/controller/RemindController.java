@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @IDE: IntelliJ IDEA
  */
 @RestController
-@Api("提醒功能")
+@Api(tags = "提醒功能")
 @RequestMapping("remind")
 public class RemindController {
 }

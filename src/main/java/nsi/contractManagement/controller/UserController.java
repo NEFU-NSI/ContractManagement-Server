@@ -28,7 +28,7 @@ import java.util.Map;
  * @FileName: UserController.java
  * @IDE: IntelliJ IDEA
  */
-@Api(value = "用户接口")
+@Api(tags =  "用户接口")
 @RequestMapping("/api/user")
 @ResponseResultBody
 @RestController

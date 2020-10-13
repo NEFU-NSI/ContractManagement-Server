@@ -23,7 +23,7 @@ import java.util.List;
  * @IDE: IntelliJ IDEA
  */
 @Slf4j
-@Api("部门接口")
+@Api(tags = "部门接口")
 @RestController
 @ResponseResultBody
 @RequestMapping("/api/department")

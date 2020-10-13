@@ -57,6 +57,10 @@ spring:
     min-idle: 0
     max-idle: 8
     max-wait: -1
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 10MB
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -86,3 +90,9 @@ jwt:
   secret: 'nefunsi'
   expiration: 604800
   tokenHead: 'Bearer '
+
+minio:
+  url: http://10.10.11.141:9000
+  accessKey: nsi
+  secretKey: nefunsi2020
+  bucketName: contract-management
