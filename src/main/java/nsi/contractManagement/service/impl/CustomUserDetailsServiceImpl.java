@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import nsi.contractManagement.DO.UserDO;
 import nsi.contractManagement.DTO.LoginUser;
@@ -86,7 +87,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         return token;
     }
 
-    public boolean register(String email, String password, String name) {
+    public boolean register(String email, String password, String name, Integer department) {
 
         List<UserDO> userDOList = userMapper.selectList(new QueryWrapper<UserDO>().eq("email",
                 email).or().eq("name"
@@ -95,7 +96,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
             throw new ApiException("用户已存在");
         }
         UserDO userDO =
-                UserDO.builder().email(email).name(name).password(passwordEncoder.encode(password)).build();
+                UserDO.builder().email(email).name(name).password(passwordEncoder.encode(password)).department(department).build();
         return userMapper.insert(userDO) == 1;
     }
 

@@ -1,7 +1,10 @@
 package nsi.contractManagement.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
+import nsi.contractManagement.DO.DepartmentDO;
 import nsi.contractManagement.DO.UserDO;
 import nsi.contractManagement.VO.UserVO;
 import nsi.contractManagement.config.response.ApiException;
@@ -17,6 +20,7 @@ import nsi.contractManagement.utils.UserUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.DomainEvents;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,10 +62,15 @@ public class UserController {
     @PostMapping("register")
     public boolean register(@RequestParam String email,
                             @RequestParam String password,
-                            @RequestParam String name
+                            @RequestParam String name,
+                            @RequestParam(value = "department") Integer department
     ) {
-        // TODO 科室存在性校验
-        return customUserDetailsServiceImpl.register(email, password, name);
+        DepartmentDO departmentDo = departmentMapper.selectById(department);
+        if(departmentDo!=null) {
+            return customUserDetailsServiceImpl.register(email, password, name, department);
+        }else {
+            throw new ApiException("对应科室不存在");
+        }
     }
 
     @ApiOperation(value = "登录")
@@ -110,5 +119,12 @@ public class UserController {
             throw new ApiException("token无效");
         }
         return customUserDetailsServiceImpl.updatePassword(email, password);
+    }
+
+    @ApiOperation(value = "删除用户")
+    @DeleteMapping("delete")
+    public boolean deleteUser(HttpServletRequest request) {
+        String email = userUtil.info(request).getEmail();
+        return userMapper.delete(new QueryWrapper<UserDO>().eq("email", email)) == 1;
     }
 }
