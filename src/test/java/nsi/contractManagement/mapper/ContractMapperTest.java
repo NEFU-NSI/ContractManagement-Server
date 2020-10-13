@@ -36,4 +36,8 @@ class ContractMapperTest {
         System.out.println(contractMapper.multipleConditionsSearchTotal("2020", "", "", ""));
 
     }
+    @Test
+    void tesTQualityGuaranteeDatetime(){
+        System.out.println(contractMapper.qualityGuaranteeDatetime().toString());
+    }
 }

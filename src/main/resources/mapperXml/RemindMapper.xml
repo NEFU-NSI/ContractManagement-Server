@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nsi.contractManagement.mapper.RemindMapper">
+  <resultMap id="BaseResultMap" type="nsi.contractManagement.DO.RemindDO">
+    <!--@mbg.generated-->
+    <!--@Table remind-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="department" jdbcType="INTEGER" property="department" />
+    <result column="read_or_not" jdbcType="BOOLEAN" property="readOrNot" />
+    <result column="message_time" jdbcType="TIMESTAMP" property="messageTime" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, message, department, read_or_not, message_time, gmt_create, gmt_modified
+  </sql>
+
+  <insert id="insertRemind">
+    insert into remind (message, department, read_or_not, message_time)
+    values (#{remindDo.message}, #{remindDo.department}, #{remindDo.readOrNot},
+    #{remindDo.messageTime});
+  </insert>
+</mapper>

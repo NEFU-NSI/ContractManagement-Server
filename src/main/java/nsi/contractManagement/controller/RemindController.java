@@ -1,10 +1,17 @@
 package nsi.contractManagement.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import nsi.contractManagement.DO.RemindDO;
+import nsi.contractManagement.config.response.ResponseResultBody;
+import nsi.contractManagement.mapper.RemindMapper;
+import nsi.contractManagement.utils.UserUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author: Tao
@@ -15,6 +22,27 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Api(tags = "提醒功能")
-@RequestMapping("remind")
+@RequestMapping("api/remind")
+@ResponseResultBody
 public class RemindController {
+
+    @Autowired
+    UserUtil userUtil;
+    @Autowired
+    RemindMapper remindMapper;
+
+    @ApiOperation(value = "获取用户的通知信息")
+    @GetMapping("list")
+    public List<RemindDO> listReminds(HttpServletRequest request) {
+        int userDepartment = userUtil.getUserDepartment(request);
+        return remindMapper.selectList(new QueryWrapper<RemindDO>().eq("department",
+                userDepartment).eq("read_or_not", false));
+    }
+
+    @ApiOperation(value = "标记通知为已读")
+    @PostMapping("read")
+    public boolean read(HttpServletRequest request, @RequestParam("id") Integer id) {
+        return remindMapper.updateById(RemindDO.builder().id(id).readOrNot(true
+        ).build()) == 1;
+    }
 }

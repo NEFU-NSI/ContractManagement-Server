@@ -75,4 +75,17 @@
 
     <select id="remindQualityGuaranteeDatetime" resultMap="BaseResultMap">
     </select>
+
+    <select id="qualityGuaranteeDatetime" resultMap="BaseResultMap">
+        select *
+        from contract
+        where DATE_FORMAT(contract.quality_guarantee_datetime, '%Y-%m-%d') = current_date
+    </select>
+
+    <select id="maintenanceExpired" resultMap="BaseResultMap">
+        select *
+        from contract
+        where DATE_FORMAT(contract.quality_guarantee_datetime, '%Y-%m-%d') &lt;=
+              date_add(current_date,interval 6 month)
+    </select>
 </mapper>

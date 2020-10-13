@@ -6,6 +6,7 @@ import nsi.contractManagement.DO.ContractDO;
 import nsi.contractManagement.VO.StatisticsVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -63,4 +64,17 @@ public interface ContractMapper extends BaseMapper<ContractDO> {
      * @return 符合条件的合同
      */
     List<ContractDO> remindQualityGuaranteeDatetime(@Param("Datetime") LocalDateTime startDateTime, @Param("Datetime") LocalDateTime endDateTime);
+
+    /**
+     * 获取质保金即将过期的合同
+     * @return 质保金即将过期的合同
+     */
+    List<ContractDO> qualityGuaranteeDatetime();
+
+    /**
+     * 维保期过期
+     * @return 维保期过期的合同
+     */
+    List<ContractDO> maintenanceExpired();
+
 }

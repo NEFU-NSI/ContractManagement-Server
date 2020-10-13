@@ -11,7 +11,9 @@ import nsi.contractManagement.config.response.ResultStatus;
 import nsi.contractManagement.mapper.DepartmentMapper;
 import nsi.contractManagement.mapper.UserMapper;
 import nsi.contractManagement.service.impl.CustomUserDetailsServiceImpl;
+import nsi.contractManagement.service.impl.MyRemindServiceImpl;
 import nsi.contractManagement.utils.JwtTokenUtil;
+import nsi.contractManagement.utils.UserUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +30,7 @@ import java.util.Map;
  * @FileName: UserController.java
  * @IDE: IntelliJ IDEA
  */
-@Api(tags =  "用户接口")
+@Api(tags = "用户接口")
 @RequestMapping("/api/user")
 @ResponseResultBody
 @RestController
@@ -39,12 +41,18 @@ public class UserController {
     private String tokenHead = "Bearer ";
 
     @Autowired
+    private MyRemindServiceImpl myRemindService;
+
+    @Autowired
     private UserMapper userMapper;
     @Autowired
     private DepartmentMapper departmentMapper;
 
     @Autowired
     private CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
+
+    @Autowired
+    private UserUtil userUtil;
 
     @ApiOperation(value = "注册")
     @PostMapping("register")
@@ -60,6 +68,7 @@ public class UserController {
     @PostMapping("login")
     public Result<Map<String, String>> login(@RequestParam String email,
                                              @RequestParam String password) {
+        myRemindService.scanAndSave();
         String token = customUserDetailsServiceImpl.login(email, password);
         Map<String, String> tokenMap = new HashMap<>(10);
         tokenMap.put("token", token);
@@ -70,21 +79,7 @@ public class UserController {
     @ApiOperation(value = "获取用户信息")
     @GetMapping("info")
     public UserVO info(HttpServletRequest request) {
-        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-        String token = request.getHeader(tokenHeader).replace("Bearer ", "");
-        boolean tokenExpired = jwtTokenUtil.isTokenExpired(token);
-        if (!tokenExpired) {
-            UserVO userVO = new UserVO();
-            UserDO currentMember = customUserDetailsServiceImpl.getCurrentMember(token);
-            BeanUtils.copyProperties(currentMember, userVO);
-            String departmentName =
-                    departmentMapper.selectById(currentMember.getId()).getDepartmentName();
-            userVO.setDepartment(departmentName);
-            return userVO;
-        } else {
-            throw new ApiException("用户token失效");
-        }
-
+        return userUtil.info(request);
     }
 
     @ApiOperation(value = "刷新token")

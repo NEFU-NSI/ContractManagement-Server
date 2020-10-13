@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: nefunsi
-    url: jdbc:mysql://10.10.11.141:3306/contract_management?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://10.10.11.141:3306/contract_management
     #    name: contract_management
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -71,7 +71,7 @@ spring:
     cache: false
 
 mybatis-plus:
-  mapper-locations: classpath:mapperXml/*.xml
+  mapper-locations: classpath*:mapperXml/*.xml
   configuration:
     map-underscore-to-camel-case: true
     call-setters-on-nulls: true
