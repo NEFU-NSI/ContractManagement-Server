@@ -1,6 +1,8 @@
 package nsi.contractManagement.utils;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import nsi.contractManagement.DO.UserDO;
+import nsi.contractManagement.DTO.LoginUser;
 import nsi.contractManagement.VO.UserVO;
 import nsi.contractManagement.config.response.ApiException;
 import nsi.contractManagement.mapper.DepartmentMapper;
@@ -10,6 +12,9 @@ import nsi.contractManagement.service.impl.MyRemindServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,20 +44,14 @@ public class UserUtil {
     @Autowired
     private CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
 
-    public UserDO getUserDo(HttpServletRequest request) {
-        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-        String token = request.getHeader(tokenHeader).replace("Bearer ", "");
-        boolean tokenExpired = jwtTokenUtil.isTokenExpired(token);
-        if (!tokenExpired) {
-            return customUserDetailsServiceImpl.getCurrentMember(token);
-        } else {
-            throw new ApiException("用户token失效");
-        }
+    public UserDO getUserDo(String email) {
+        return userMapper.selectOne(new QueryWrapper<UserDO>().eq("email", email));
+
     }
 
-    public UserVO info(HttpServletRequest request) {
+    public UserVO info(String email) {
         UserVO userVO = new UserVO();
-        UserDO currentMember = this.getUserDo(request);
+        UserDO currentMember = this.getUserDo(email);
         BeanUtils.copyProperties(currentMember, userVO);
         String departmentName =
                 departmentMapper.selectById(currentMember.getId()).getDepartmentName();
@@ -60,8 +59,14 @@ public class UserUtil {
         return userVO;
     }
 
-    public int getUserDepartment(HttpServletRequest request) {
-        return this.getUserDo(request).getDepartment();
+    public int getUserDepartment(String email) {
+        return this.getUserDo(email).getDepartment();
     }
 
+    public UserDO getCurrentMember() {
+        SecurityContext ctx = SecurityContextHolder.getContext();
+        Authentication auth = ctx.getAuthentication();
+        LoginUser memberDetails = (LoginUser) auth.getPrincipal();
+        return memberDetails.getUser();
+    }
 }

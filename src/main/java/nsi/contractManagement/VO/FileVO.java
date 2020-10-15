@@ -14,4 +14,5 @@ import lombok.Data;
 @Builder
 public class FileVO {
     String fileUrl;
+    String name;
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -33,8 +34,8 @@ public class RemindController {
 
     @ApiOperation(value = "获取用户的通知信息")
     @GetMapping("list")
-    public List<RemindDO> listReminds(HttpServletRequest request) {
-        int userDepartment = userUtil.getUserDepartment(request);
+    public List<RemindDO> listReminds(Principal principal) {
+        int userDepartment = userUtil.getUserDepartment(principal.getName());
         return remindMapper.selectList(new QueryWrapper<RemindDO>().eq("department",
                 userDepartment).eq("read_or_not", false));
     }

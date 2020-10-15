@@ -24,6 +24,7 @@ import org.springframework.data.domain.DomainEvents;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,9 +67,9 @@ public class UserController {
                             @RequestParam(value = "department") Integer department
     ) {
         DepartmentDO departmentDo = departmentMapper.selectById(department);
-        if(departmentDo!=null) {
+        if (departmentDo != null) {
             return customUserDetailsServiceImpl.register(email, password, name, department);
-        }else {
+        } else {
             throw new ApiException("对应科室不存在");
         }
     }
@@ -87,8 +88,11 @@ public class UserController {
 
     @ApiOperation(value = "获取用户信息")
     @GetMapping("info")
-    public UserVO info(HttpServletRequest request) {
-        return userUtil.info(request);
+    public UserVO info(Principal principal) {
+
+        UserDO currentMember = userUtil.getCurrentMember();
+
+        return userUtil.info(principal.getName());
     }
 
     @ApiOperation(value = "刷新token")
@@ -111,7 +115,8 @@ public class UserController {
                                   @RequestParam(value = "password", defaultValue = "") String password,
                                   HttpServletRequest request) {
         JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-        String token = request.getHeader(tokenHeader).replace("Bearer ", "");
+        // .replace("Bearer ", "")
+        String token = request.getHeader(tokenHeader);
         boolean tokenExpired = jwtTokenUtil.isTokenExpired(token);
         if (!tokenExpired) {
             customUserDetailsServiceImpl.updatePassword(email, password);
@@ -123,8 +128,11 @@ public class UserController {
 
     @ApiOperation(value = "删除用户")
     @DeleteMapping("delete")
-    public boolean deleteUser(HttpServletRequest request) {
-        String email = userUtil.info(request).getEmail();
-        return userMapper.delete(new QueryWrapper<UserDO>().eq("email", email)) == 1;
+    public boolean deleteUser(Principal principal) {
+        if (principal != null) {
+            throw new ApiException("用户未登录");
+        }
+        UserDO currentMember = userUtil.getCurrentMember();
+        return userMapper.delete(new QueryWrapper<UserDO>().eq("email", currentMember.getEmail())) == 1;
     }
 }
