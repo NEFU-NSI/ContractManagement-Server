@@ -84,6 +84,12 @@ server:
   error:
     whitelabel:
       enabled: false
+  undertow:
+    threads:
+      io: 4
+      worker: 1024
+    buffer-size: 2048
+    direct-buffers: true
 
 jwt:
   tokenHeader: 'Authorization'

@@ -23,6 +23,7 @@ import java.util.List;
  * @IDE: IntelliJ IDEA
  */
 @Slf4j
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Api(tags = "部门接口")
 @RestController
 @ResponseResultBody
@@ -48,11 +49,11 @@ public class DepartmentController {
     @ApiOperation(value = "更新部门")
     @PutMapping("update")
     public boolean updateDepartment(@RequestParam(value = "departmentId") String departmentId,
-                                    @Validated @RequestBody DepartmentVO departmentVO) {
+                                    @RequestBody DepartmentVO departmentVO) {
         UpdateWrapper<DepartmentDO> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", departmentId);
         DepartmentDO departmentDO = new DepartmentDO();
-        BeanUtils.copyProperties(departmentVO,departmentDO);
+        BeanUtils.copyProperties(departmentVO, departmentDO);
         return departmentService.update(departmentDO, updateWrapper);
     }
 

@@ -3,7 +3,6 @@ package nsi.contractManagement.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import nsi.contractManagement.DO.DepartmentDO;
 import nsi.contractManagement.DO.UserDO;
 import nsi.contractManagement.VO.UserVO;
@@ -17,10 +16,8 @@ import nsi.contractManagement.service.impl.CustomUserDetailsServiceImpl;
 import nsi.contractManagement.service.impl.MyRemindServiceImpl;
 import nsi.contractManagement.utils.JwtTokenUtil;
 import nsi.contractManagement.utils.UserUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.DomainEvents;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -117,6 +114,7 @@ public class UserController {
         JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
         // .replace("Bearer ", "")
         String token = request.getHeader(tokenHeader);
+        token = token.replace("Bearer ", "");
         boolean tokenExpired = jwtTokenUtil.isTokenExpired(token);
         if (!tokenExpired) {
             customUserDetailsServiceImpl.updatePassword(email, password);

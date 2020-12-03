@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Author: Tao
@@ -35,7 +33,8 @@ public class MinIoController {
     @PostMapping(value = "/upload")
     public FileVO upload(@RequestParam("file") MultipartFile file)  {
         String fileUrl = MinIoUtil.upload(minIoProperties.getBucketName(), file);
-        return FileVO.builder().fileUrl(fileUrl).name(file.getOriginalFilename()).build();
+
+        return FileVO.builder().fileUrl(fileUrl).fileName(file.getOriginalFilename()).build();
 
     }
 

@@ -11,7 +11,7 @@
     </parent>
     <groupId>nsi</groupId>
     <artifactId>contractDO-management</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0</version>
     <name>contractDO-management</name>
     <description>ContractManagement</description>
 
@@ -45,6 +45,24 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.3.4.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>org.springframework.boot</artifactId>
+                    <groupId>spring-boot-start-tomcat</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+            <version>2.3.4.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>wildfly-common</artifactId>
+                    <groupId>org.wildfly.common</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.session</groupId>
@@ -189,7 +207,6 @@
                 <filtering>false</filtering>
             </resource>
         </resources>
-
     </build>
 
 </project>
